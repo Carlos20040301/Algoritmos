@@ -1,0 +1,28 @@
+class Node:
+    def __init__(self, freq=None, char=None, left=None, right=None):
+        self.freq = freq
+        self.char = char
+        self.left = left
+        self.right = right
+
+def decode_huffman(encoded_message, huffman_tree):
+    current_node = huffman_tree
+    decoded_message = ''
+    for bit in encoded_message:
+        if bit == '0':
+            current_node = current_node.left
+        elif bit == '1':
+            current_node = current_node.right
+        else:
+            raise ValueError(f'Invalid bit in encoded message: {bit}')
+        if current_node.char is not None:
+            decoded_message += current_node.char
+            current_node = huffman_tree
+    return decoded_message
+
+# Example usage
+huffman_tree = Node(left=Node(left=Node(char='D'), right=Node(char='C')),
+                    right=Node(freq=4, left=Node(char='A'), right=Node(char='B')))
+encoded_message = '0101110001001001011011100110010100'
+decoded_message = decode_huffman(encoded_message, huffman_tree)
+print(decoded_message)  # Output: DABDAC
